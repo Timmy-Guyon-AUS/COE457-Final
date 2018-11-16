@@ -1,9 +1,15 @@
 <html>
 
 <head>
-    <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//unpkg.com/mqtt/dist/mqtt.min.js"></script>
     <script>
+
         $(document).ready(function () {
+            var client = mqtt.connect('mqtt://test.mosquitto.org:8080')
+            client.on('connect', function () {
+                console.log('connected');
+            })
             $('#submit').click(function () {
                 var postData = JSON.stringify({
                     time: new Date().getTime(),
@@ -12,23 +18,7 @@
                         lng: Math.ceil((Math.random() * 10) % 9),
                     }
                 });
-
-                $.ajax({
-                    type: "POST",
-                    url: "http://localhost:3000/alert/process-create-alert",
-                    data: {
-                        postData
-                    },
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    dataType: "json"
-
-
-                }).done(function(msg){
-                    console.log(msg)
-                })
-
+                client.publish('alert/initial-alert', postData);
 
             })
         });
