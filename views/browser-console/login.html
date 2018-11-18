@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="assets/jquery-3.3.1.min.js"></script>
+    <script src="assets/Password-Strength-Match-Validation-Plugin-jQuery/jquery.password-validation.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/styleTabs.css">
+    <link rel="stylesheet" type="text/css" href="./css/styleForms.css">
+    <title> Log In </title>
+</head>
+
+<body>
+
+        <h1 class="title">Women In Danger</h1>
+        <div class="tabContainer">
+            <div class="buttonContainer">
+                <button onclick="window.open('tabs.html', '_self');">Home Page</button>
+                <button onclick="window.open('about.html', '_self');">About</button>
+                <button onclick="window.open('alerts.html', '_self');">Danger Alerts</button>
+                <button onclick="window.open('Login.html', '_self');">Log In</button>
+                <button onclick="window.open('signup.html', '_self');">Sign Up</button>
+         
+            </div>
+        </div>
+
+    <div class="container">
+        <h4>Log In</h4>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="well well-bg">
+                        <div class="form-group">
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="username" placeholder="Enter username" name="username" class="form-control"
+                                required />
+                        </div> 
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="password" placeholder="Enter Password" name="password" class="form-control"
+                                required />
+                        </div>              
+                        <div class="form-group">
+                            <button type="submit" id="loginbtn" class="loginbtn">Log In</button>
+                        </div>   
+                </div>
+            </div>
+            <div class="col -md -5">
+                <div id="errors"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#loginbtn").click((event)=>{
+                console.log("clicked");
+                $.ajax({
+                    url:"http://localhost:2500/processlogin_post",
+                    type:"POST",
+                    headers:{
+                        "Content-Type":"application/x-www-form-urlencoded"
+                    },
+                    data:{
+                        username:$('#username').val(),
+                        password:$('#password').val()
+                    },
+                    success: function(data){ //when the server responds 
+                        if(data=="success"){ 
+                            alert("You have logged in successfully!");
+                        }else if(data=="failure"){
+                            alert("Incorrect username or password! Please try again.");
+                        }
+                    }
+                })
+            })
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+.title{
+    font-family: sans-serif;
+    color: #dc2d5e;
+    text-align: center;
+    font-size: 200%;
+    margin-top:5px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/*single grey box*/
+.tabContainer .buttonContainer button{
+    width: 20%;
+    height: 50px;
+    float: left;
+    border: none;
+    outline:none;
+    cursor: pointer;
+    padding: 10px;
+    font-family: sans-serif;
+    font-size: 18px;
+    background-color: #eee;
+    text-decoration: none;
+    color: darkslategray; /*text color*/
+}
+/*single grey box hover*/
+.tabContainer .buttonContainer button:hover{
+    opacity: 0.8;
+    background-color: #d7d4d4;
+}
+
+body {
+    padding: 5px;
+    background-image: url("street1.jpg");
+    font-family: Arial, Helvetica, sans-serif;
+    /*
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    */
+}
+
+/*effect of text in class box effect*/
+.box h3{
+      text-align:center;
+      position:relative;
+      color: rgb(59, 59, 59);
+      top:40px;
+  }
+
+
+.box {
+      width:70%;
+      height:370px;
+      opacity: 0.9;
+      margin:100px auto;
+      border-radius: 1.5%; /*soft corners*/      
+      background:rgb(255, 232, 232);
+  }
+
+#homepage.box{
+    height:385px;
+    margin-top:100px;
+    margin-bottom:20px;
+    border: 2px solid rgb(214, 189, 189);
+    top:0px;
+}
+
+
+.box p{
+    text-align:right;
+    position:relative;
+    top:20px;
+    margin-right: 2.5%;
+    margin-left: 15%;
+}
