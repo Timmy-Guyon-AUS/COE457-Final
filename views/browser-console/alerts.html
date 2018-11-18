@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title> Danger Alerts </title>
+    <link rel="stylesheet" type="text/css" href="./css/styleTabs.css">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="./css/styleAlerts.css">
+</head>
+
+<body>
+
+    <h1 class="title">Women In Danger</h1>
+    <div class="tabContainer">
+        <div class="buttonContainer">
+                <button onclick="window.open('tabs.html', '_self');">Home Page</button>
+                <button onclick="window.open('about.html', '_self');">About</button>
+                <button onclick="window.open('alerts.html', '_self');">Danger Alerts</button>
+                <button onclick="window.open('Login.html', '_self');">Log In</button>
+                <button onclick="window.open('signup.html', '_self');">Sign Up</button>
+
+        </div>
+    </div>
+
+    <!-- div to hold the whole monitor in the body -->
+  <div id="console-container">
+        <!-- div to hold the sidear -->
+        <div id="console-sidebar-container">
+          <div id="header-container">
+            <h1>Active Alerts</h1>
+          </div>
+          <!-- div to hold the list of active alerts -->
+          <div id="sidebar-list-container">
+            <!-- <ol> where active alerts will be apended as <li>s -->
+            <ol id="console-sidebar-ol">
+            </ol>
+          </div>
+        </div>
+        <!-- div to be targeted by the google maps scripts -->
+        <div id="map-container">
+          <div id="map"></div>
+        </div>
+      </div>
+</body>
+<footer>
+        <!-- linking our JS and the google maps javascript -->
+        <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxuO00JkJOnCtNxK5YzsQNFB7cKEutcZ4&callback=initMap">
+        </script>
+        <script src="./js/mapScripts.js"></script>
+        
+      </footer>
+      
+</html>

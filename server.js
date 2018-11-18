@@ -2,13 +2,33 @@
 //Middleware - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const express = require("express");
 const app = express();
-const cfenv = require("cfenv");
+var cors = require('cors');
 const bodyParser = require('body-parser')
 const expressSession = require("express-session");
 //
+app.set('port', process.env.PORT || 2500);
+app.use(cors());
+app.use(express.static(__dirname));
+//
 //Routes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + './views/browser-console/tabs.html');
+})
+app.get('/about', (req, res) => {
+  res.sendFile(__dirname + './views/browser-console/about.html');
+})
+app.get('/alerts', (req, res) => {
+  res.sendFile(__dirname + './views/browser-console/alerts.html');
+})
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + './views/browser-console/login.html');
+})
+app.get('/signup', (req, res) => {
+  res.sendFile(__dirname + './views/browser-console/signup.html');
+})
+//
+const usersRoute = require("./routes/user");
 const alertsRoute = require("./routes/alert");
- 
 //
 //MQTT Subscribers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const alertSubscriber = require("./mqtt-clients/subscribers/alerts-subscriber.js")
@@ -48,6 +68,10 @@ app.use((req, res, next) => {
   }
 });
 //
+app.use("/user", usersRoute);
+app.use("/alert", alertsRoute);
+//
+//
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   let err = new Error("Not Found");
@@ -65,11 +89,9 @@ app.use(function (req, res, next) {
   res.type("txt").send("Not found");
   next();
 });
-//
-app.use("/alert", alertsRoute);
-//
+
 //app.listen config - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-var port = process.env.PORT || 3000
-app.listen(port, function () {
-  console.log("To view your app, open this link in your browser: http://localhost:" + port);
+app.listen(app.get('port'), function () {
+  console.log('Express started on http://localhost:' +
+    app.get('port') + '; press Ctrl-C to terminate.');
 });

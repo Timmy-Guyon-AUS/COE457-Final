@@ -57,6 +57,7 @@ client.on('connect', function () {
 
 client.on('message', function (topic, message) {
       // insert alert into alertsDB
+      console.log("messaged recieved to topic: " + topic + " " + message);
       var alert = JSON.parse(message.toString());
       if (alertsDB) {
             alertsDB.insert(alert, function (err, body, header) {

@@ -5,8 +5,11 @@ var app = express();
 var cfenv = require("cfenv");
 var bodyParser = require('body-parser')
 var router = express.Router();
+var cors = require('cors');
+//
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors);
 //
 //IBM Cloud Foundry App Config Variables- - - - - - - - - - - - - - - - - - - - 
 //load local VCAP configuration  and service credentials
@@ -51,25 +54,43 @@ if (cloudant) {
   alertsDB = cloudant.db.use(alertsDBName);
 }
 //
-//Routes- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-router.post("/process-create-alert", (req, res) => {
-  var alert;
-  alert = JSON.parse(req.body.postData);
-  if (!alertsDB) {
-    res.send(alert);
-    return;
-  }
-  // insert alert into alertsDB
-  alertsDB.insert(alert, function (err, body, header) {
-    if (err) {
-      console.log('[alertsDB.insert] ', err.message);
-      res.send("Error");
-      return;
-    }
-    alert._id = body.id;
-    res.send(alert);
-  });
+// //Routes- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+// router.post("/process-create-alert", (req, res) => {
+//   var alert;
+//   alert = JSON.parse(req.body.postData);
+//   if (!alertsDB) {
+//     res.send(alert);
+//     return;
+//   }
+//   // insert alert into alertsDB
+//   alertsDB.insert(alert, function (err, body, header) {
+//     if (err) {
+//       console.log('[alertsDB.insert] ', err.message);
+//       res.send("Error");
+//       return;
+//     }
+//     alert._id = body.id;
+//     res.send(alert);
+//   });
+// });
 
+
+router.get("/update-console", (req, res) => {
+  // Prepare output in JSON format
+  // alertsDB.view('browser-side-views', 'view-all-alerts').then((body) => {
+  //   console.log(body.rows);
+  //   // body.rows.forEach((doc) => {
+  //   //   console.log(doc.value);
+  //   // });
+  // });
+  alertsDB.view('browser-side-views', 'view-all-alerts', function (err, body) {
+    if (!err) {
+      var rows = body.rows; //the rows returned
+      res.end(JSON.stringify(rows))
+    } else {
+      console.log(err);
+    }
+  });
 });
 
 
