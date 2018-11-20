@@ -60,6 +60,9 @@ client.on('message', function (topic, message) {
       console.log("messaged recieved to topic: " + topic + " " + message);
       var alert = JSON.parse(message.toString());
       if (alertsDB) {
+            if(!alert.status){
+                  alert.status = 'initial';
+            }
             alertsDB.insert(alert, function (err, body, header) {
                   if (err) {
                         console.log('[alertsDB.insert] ', err.message);
@@ -67,11 +70,8 @@ client.on('message', function (topic, message) {
                         return;
                   }
                   alert._id = body.id;
-
             });
       }
-
-
 })
 
 

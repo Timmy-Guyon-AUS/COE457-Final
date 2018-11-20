@@ -33,6 +33,9 @@ function initMap() {
   });
   geocoder = new google.maps.Geocoder;
   errorInfoWindow = new google.maps.InfoWindow;
+  //
+  initAlertListener();
+
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -55,7 +58,7 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, errorInfoWindow, map.getCenter());
   }
-  initAlertListener();
+  
 }
 function handleLocationError(browserHasGeolocation, errorInfoWindow, pos) {
   errorInfoWindow.setPosition(pos);
@@ -84,7 +87,7 @@ function drawAlertMarker(map, dangerAlert) {
   //add to array
   markers.push(marker);
   //content string for infoWindow
-  var contentString = '<div id="infoWindow-' + dangerAlert.UUID + '">      <span style = "display:block">Alert ID: ' + dangerAlert.UUID + '</span>  <span style = "display:block">Created at:  ' + dangerAlert.creationTimeStamp + '</span> <span style = "display:block">Status:  ' + dangerAlert.status + '</span>  </div>';
+  var contentString = '<div class="alert-infowindow" id="infoWindow-' + dangerAlert.UUID + '" >                                             <span>Alert ID: ' + dangerAlert.UUID + '</span>                      <span>Created at:  ' + new Date(dangerAlert.creationTimeStamp).getDate() + '</span>   <span>Status:  ' + dangerAlert.status + '</span>                        <span><button>Respond</button>                                                               </div>';
   //add click event to marker
   marker.addListener('click', function () {
     closeOpenAlert();
@@ -164,7 +167,7 @@ var onClickFunction = function () {
     var correspondingDangerAlert = dangerAlerts.find(function (element) {
       return element.UUID == thisLi.getAttributeNode('data-uuid').value;
     });
-    var contentString = '<div id="infoWindow-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + correspondingDangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span></div>';
+    var contentString = '<div id="infoWindow-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + correspondingDangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span><button>Respond</button></div>';
     //
     if (infoWindow) {
       infoWindow.close();
@@ -172,17 +175,24 @@ var onClickFunction = function () {
     infoWindow = new google.maps.InfoWindow({
       content: contentString
     });
+    var button = infoWindow.content;
+    console.log(button)
     map.panTo(correspondingMarker.position);
     infoWindow.open(map, correspondingMarker);
   }
 }
+// contentString = function(dangerAlert) {
+//   var contentString = '<div class="sidebarLi status-' + dangerAlert.status + 'id="sidebarLi-' + dangerAlert.UUID + '">                                    <span style = "display:block">Alert ID: ' + dangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + dangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + dangerAlert.status + '</span>  <span class="status-indicator"></span></div>';
+//   return contentString;
+
+// }
 //
 //
 function updateSidebar(correspondingDangerAlert, addOrRemove) {
   if (addOrRemove) {
     var consoleSidebarOL = document.getElementById('console-sidebar-ol');
     var li = document.createElement('li');
-    var contentString = '<div id="sidebarLi-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + correspondingDangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span></div>';
+    var contentString = '<div class="sidebarLi status-' + correspondingDangerAlert.status + 'id="sidebarLi-' + correspondingDangerAlert.UUID + '">                                    <span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + correspondingDangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span>  <span class="status-indicator"></span><button onclick=respondFunction(' + correspondingDangerAlert.UUID + ')>Respond</button></div>';
     var div = document.createElement('div');
     li.innerHTML = contentString;
     //add ID that will associate it with marker on map
@@ -198,6 +208,10 @@ function updateSidebar(correspondingDangerAlert, addOrRemove) {
   else { }
 }
 
+function respondFunction(UUID) {
+  // var dangerAlert =
+  console.log(UUID);
+}
 //generate unique identifier string
 function uuidv4() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
@@ -243,12 +257,15 @@ function changeAlertStatus(dangerAlert, status) {
 
 function initAlertListener() {
   console.log('initing');
+  var succesfulinit = false;
 
-  intervalId = setInterval(function () {
+
     $.getJSON("http://localhost:2500/alert/update-console", function (result) {
+      succesfulinit = true;
       if (!pos || !pos.lat || !pos.lng) {
         pos.lat = 25.3125056,
           pos.lng = 55.4943655
+
       }
 
       result.map(function (alert) {
@@ -259,16 +276,44 @@ function initAlertListener() {
             coords = alert.key.coords || {
               lat: undefined, lng: undefined
             };
-            coords.lat = pos.lat+ ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
-            coords.lng = pos.lng+ ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
+            coords.lat = pos.lat + ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
+            coords.lng = pos.lng + ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
             time = alert.key.time;
           }
-      
+
           var dangerAlert = new DangerAlert(id, coords, time);
           drawAlertMarker(map, dangerAlert);
+          
         }
       })
+      
     });
-  }, 1000);
+
+  // intervalId = setInterval(function () {
+  //   $.getJSON("http://localhost:2500/alert/update-console", function (result) {
+  //     if (!pos || !pos.lat || !pos.lng) {
+  //       pos.lat = 25.3125056,
+  //         pos.lng = 55.4943655
+  //     }
+
+  //     result.map(function (alert) {
+  //       if (!dangerAlerts.some(function (loggedAlert) { return loggedAlert.UUID == alert.id })) {
+  //         var id, coords = {}, time;
+  //         if (alert) {
+  //           id = alert.id || undefined;
+  //           coords = alert.key.coords || {
+  //             lat: undefined, lng: undefined
+  //           };
+  //           coords.lat = pos.lat + ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
+  //           coords.lng = pos.lng + ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
+  //           time = alert.key.time;
+  //         }
+
+  //         var dangerAlert = new DangerAlert(id, coords, time);
+  //         drawAlertMarker(map, dangerAlert);
+  //       }
+  //     })
+  //   });
+  // }, 10000);
 
 }

@@ -16,7 +16,9 @@
                     coords: {
                         lat: Math.ceil((Math.random() * 10) % 9),
                         lng: Math.ceil((Math.random() * 10) % 9),
-                    }
+                    },
+                    status: 'initial'
+                
                 });
                 client.publish('alert/initial-alert', postData);
 
