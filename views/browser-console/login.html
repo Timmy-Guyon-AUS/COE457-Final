@@ -58,7 +58,7 @@
             $("#loginbtn").click((event)=>{
                 console.log("clicked");
                 $.ajax({
-                    url:"http://localhost:2500/processlogin_post",
+                    url:"/processlogin_post",
                     type:"POST",
                     headers:{
                         "Content-Type":"application/x-www-form-urlencoded"
