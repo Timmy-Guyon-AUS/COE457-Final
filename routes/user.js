@@ -9,6 +9,9 @@ var router = express.Router();
 //
 app.use(urlencodedParser);
 app.use(bodyParser.json());
+//for encryting the passwords
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 //
 //IBM Cloud Foundry App Config Variables- - - - - - - - - - - - - - - - - - - - 
 //load local VCAP configuration  and service credentials
@@ -62,12 +65,10 @@ router.post('/processignup_post', urlencodedParser, function (req, res) {
 
   //check if the username already exists in the db
   policeDB.view('police-user-views', 'view-username-password', {
-    key: req.body.username,
-    'include_docs': true
-  }).then((body) => {
-    if (body.rows.length != 0) {
-      //user already exists
-      userExists = true;
+    key: req.body.username
+  }, (err, body) => {
+    if (body.rows.length != 0) { //if the username exists, k = exists 
+      userExists = 'exists';
       res.end('failure1'); //send sign in failure due to existing username
     }
   });
@@ -75,9 +76,8 @@ router.post('/processignup_post', urlencodedParser, function (req, res) {
 
   //check if the user already exits in the database and store only non exisitng users to the db
   policeDB.view('police-user-views', 'view-username-email', {
-    key: req.body.name,
-    'include_docs': true
-  }).then((body) => {
+    key: req.body.name
+  }, (err, body) => {
     var i = body.rows.length; //get length of rows for entires with the given key 
     //(thus with the same name)
     var j = i - 1;
@@ -136,7 +136,7 @@ router.post('/processignup_post', urlencodedParser, function (req, res) {
             mobilenumber: req.body.mobilenumber,
             password: hash
           };
-          
+
           policeDB.insert(response, id, function (err, body, header) {
             if (err) {
               console.log('[policeDB.insert] ', err.message);
@@ -152,11 +152,40 @@ router.post('/processignup_post', urlencodedParser, function (req, res) {
       });
     }
   });
-
-
 })
 
+//---------------------------- LOG IN -------------------------------------------------------
+//when the user submits the log in form, the data is sent to the server
+router.post('/processlogin_post', urlencodedParser, function (req, res) {
+  // // Prepare output in JSON format
+  // loginresponse = {
+  //   theusername: req.body.username,
+  //   thepassword: req.body.password
+  // };
 
+  //successfully log in user if the username and the corresponding password exists in the database
+  policeDB.view('police-user-views', 'view-username-password', {
+    key: req.body.username
+  }, (err, body) => {
+    if (body.rows.length == 0) { //if username doesnot exist in the database, log in fails
+      res.end('failure');
+    }
+    else {
+      bcrypt.compare(req.body.password, body.rows[0].value, function (err, result) {
+        //if username exists and the entered password is equal to the
+        //the db password, log in is successful
+        if (result == true) { //passwords are equal
+          res.end('success');
+        }
+        //if username exists in the database but the entered password is not equal to the
+        //the db password, log in fails
+        else if (result == false) {
+          res.end('failure');
+        }
+      });
+    }
+  });
+})
 
 
 
