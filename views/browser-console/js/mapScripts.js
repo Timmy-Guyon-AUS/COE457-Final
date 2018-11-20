@@ -260,7 +260,7 @@ function initAlertListener() {
   var succesfulinit = false;
 
 
-    $.getJSON("http://localhost:2500/alert/update-console", function (result) {
+    $.getJSON("/alert/update-console", function (result) {
       succesfulinit = true;
       if (!pos || !pos.lat || !pos.lng) {
         pos.lat = 25.3125056,
@@ -290,7 +290,7 @@ function initAlertListener() {
     });
 
   // intervalId = setInterval(function () {
-  //   $.getJSON("http://localhost:2500/alert/update-console", function (result) {
+  //   $.getJSON("/alert/update-console", function (result) {
   //     if (!pos || !pos.lat || !pos.lng) {
   //       pos.lat = 25.3125056,
   //         pos.lng = 55.4943655
