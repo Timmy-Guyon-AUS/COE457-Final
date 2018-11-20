@@ -87,7 +87,7 @@
             $("#signupbtn").click((event) => {
                 console.log("clicked");
                 $.ajax({
-                    url: "/processignup_post",
+                    url: "/user/processignup_post",
                     type: "POST",
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
