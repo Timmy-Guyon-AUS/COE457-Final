@@ -48,7 +48,7 @@ if (cloudant) {
       areasDB = cloudant.db.use(areaDBName);
 
 }
-//
+// Cloudant db setup ^
 //MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 client.on('connect', function () {
       client.subscribe('areas/+/env-data', function (err) {
@@ -73,10 +73,4 @@ client.on('message', function (topic, message) {
             });
       }
 })
-
-
-
-
-
-
 module.exports = client;

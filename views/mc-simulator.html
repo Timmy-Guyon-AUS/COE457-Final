@@ -3,9 +3,20 @@
 <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxuO00JkJOnCtNxK5YzsQNFB7cKEutcZ4">
+    </script>
     <script>
-
+        //initializing global variables
+        var map, pos = { lat: null, lng: null };
         $(document).ready(function () {
+            // if (navigator.geolocation) {
+            //     navigator.geolocation.getCurrentPosition(function (position) {
+            //         pos.lat = position.coords.latitude;
+            //         pos.lng = position.coords.longitude;
+            //         $('#submit').removeAttr('disabled');
+            //     })
+            // } 
+ 
             var client = mqtt.connect('mqtt://test.mosquitto.org:8080')
             client.on('connect', function () {
                 console.log('connected');
@@ -17,8 +28,10 @@
                     humidity: (Math.round(Math.random() * 100) + '%'),
                     lightIntensity: Math.round(Math.random() * 10) + 'uv',
                     location: {
-                        lat: Math.ceil((Math.random() * 10) % 9),
-                        lng: Math.ceil((Math.random() * 10) % 9),
+                        // lat: pos.lat + Math.ceil((Math.random() * 10) % 9) - 4.5,
+                        // lng: pos.lng + Math.ceil((Math.random() * 10) % 9) - 4.5,
+                        lat: 25.3131466 + Math.ceil((Math.random() * 10) % 9) - 4.5,
+                        lng: 55.4918937 + Math.ceil((Math.random() * 10) % 9) - 4.5,
                     },
                 });
                 client.publish('areas/area1/env-data', postData);
@@ -29,7 +42,7 @@
 </head>
 
 <body style="display:flex;justify-content: center;align-items: center">
-    <input type="button" value="send env data" id="submit">
+    <input type="button" value="send env data" id="submit" >
 </body>
 
 </html>

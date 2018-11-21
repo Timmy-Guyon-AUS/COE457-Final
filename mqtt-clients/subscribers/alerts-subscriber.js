@@ -47,7 +47,7 @@ if (cloudant) {
       // Specify the database we are going to use (alertsdb)...
       alertsDB = cloudant.db.use(alertsDBName);
 }
-//
+//Db setup ^
 //MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 client.on('connect', function () {
       client.subscribe('alert/initial-alert', function (err) {
@@ -73,10 +73,4 @@ client.on('message', function (topic, message) {
             });
       }
 })
-
-
-
-
-
-
 module.exports = client;
