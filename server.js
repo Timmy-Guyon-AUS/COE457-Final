@@ -5,20 +5,38 @@ const app = express();
 var cors = require('cors');
 const bodyParser = require('body-parser')
 const expressSession = require("express-session");
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 //
 app.set('port', process.env.PORT || 2500);
 app.use(cors());
 app.use(express.static(__dirname));
+app.use(session({secret: 'ssshhhhh'}));
 //
 //Routes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + './views/browser-console/tabs.html');
+  console.log(req.session);
+  if (req.session.loggedIn) {
+    res.sendFile(__dirname + './views/browser-console/tabs.html');
+  } else {
+    res.sendFile(__dirname + './views/browser-console/login.html');
+  }
+})
+app.get('/views', (req,res) => {
+  console.log(req.session);
+  if (!req.session.loggedIn) {
+    res.sendFile(__dirname + './views/browser-console/login.html');
+  }
 })
 app.get('/about', (req, res) => {
   res.sendFile(__dirname + './views/browser-console/about.html');
 })
 app.get('/alerts', (req, res) => {
-  res.sendFile(__dirname + './views/browser-console/alerts.html');
+  if (req.session.loggedIn) {
+    res.sendFile(__dirname + './views/browser-console/alerts.html');
+  } else {
+    res.sendFile(__dirname + './views/browser-console/login.html');
+  }
 })
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + './views/browser-console/login.html');
