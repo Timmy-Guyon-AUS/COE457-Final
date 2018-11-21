@@ -6,7 +6,7 @@ var cfenv = require("cfenv");
 //
 //IBM Cloud Foundry App Config Variables- - - - - - - - - - - - - - - - - - - - 
 //load local VCAP configuration  and service credentials
-var alertsDB;
+var areasDB;
 var vcapLocal;
 try {
       vcapLocal = require('./vcap-local.json');
@@ -18,7 +18,7 @@ var appEnv = cfenv.getAppEnv(appEnvOpts);
 //
 //Cloudant library loading and init- - - - - - - - - - - - - - - - - - - - - - -
 var Cloudant = require('@cloudant/cloudant');
-var cloudant, alertsDB;
+var cloudant, areasDB;
 if (appEnv.services['COE457-cloudantNoSQLDB'] || appEnv.getService(/cloudant/)) {
       // Initialize database with credentials
       if (appEnv.services['COE457-cloudantNoSQLDB']) {
@@ -38,38 +38,38 @@ if (appEnv.services['COE457-cloudantNoSQLDB'] || appEnv.getService(/cloudant/)) 
 }
 if (cloudant) {
       //database name
-      alertsDBName = 'alerts';
+      areaDBName = 'areas';
       // Create a new "mydb" database.
-      cloudant.db.create(alertsDBName, function (err, data) {
+      cloudant.db.create(areaDBName, function (err, data) {
             if (!err) //err if database doesn't already exists
-                  console.log("Created database: " + alertsDBName);
+                  console.log("Created database: " + areaDBName);
       });
-      // Specify the database we are going to use (alertsdb)...
-      alertsDB = cloudant.db.use(alertsDBName);
+      // Specify the database we are going to use (areasDB)...
+      areasDB = cloudant.db.use(areaDBName);
+
 }
-//Db setup ^
+// Cloudant db setup ^
 //MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 client.on('connect', function () {
-      client.subscribe('alert/initial-alert', function (err) {
+      client.subscribe('areas/+/env-data', function (err) {
 
       })
 })
 
 client.on('message', function (topic, message) {
-      // insert alert into alertsDB
-      console.log("messaged recieved to topic: " + topic + " " + message);
-      var alert = JSON.parse(message.toString());
-      if (alertsDB) {
-            if(!alert.status){
-                  alert.status = 'initial';
-            }
-            alertsDB.insert(alert, function (err, body, header) {
+      // insert alert into areasDB
+      var topicArray = topic.split("/");
+      var envData = JSON.parse(message.toString());
+      envData.area = topicArray[1];
+      console.log(envData);
+      if (areasDB) {
+            areasDB.insert(envData, function (err, body, header) {
                   if (err) {
-                        console.log('[alertsDB.insert] ', err.message);
+                        console.log('[areasDB.insert] ', err.message);
                         res.send("Error");
                         return;
                   }
-                  alert._id = body.id;
+                  envData._id = body.id;
             });
       }
 })

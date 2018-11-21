@@ -6,12 +6,12 @@ var cfenv = require("cfenv");
 var bodyParser = require('body-parser')
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var router = express.Router();
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+// var cookieParser = require('cookie-parser');
+// var session = require('express-session');
 //
 app.use(urlencodedParser);
 app.use(bodyParser.json());
-app.use(session({secret: 'ssshhhhh'}));
+// app.use(session({secret: 'ssshhhhh'}));
 //for encryting the passwords
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -179,7 +179,7 @@ router.post('/processlogin_post', urlencodedParser, function (req, res) {
         //the db password, log in is successful
         if (result == true) { //passwords are equal
           res.end('success');
-          req.session.loggedIn = true;
+          // req.session.loggedIn = true;
         }
         //if username exists in the database but the entered password is not equal to the
         //the db password, log in fails
