@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            var client = mqtt.connect('mqtt://test.mosquitto.org:8080')
+            client.on('connect', function () {
+                console.log('connected');
+            })
+            $('#submit').click(function () {
+                var postData = JSON.stringify({
+                    time: new Date().getTime(),
+                    temp: Math.round(Math.random() * 100),
+                    humidity: (Math.round(Math.random() * 100) + '%'),
+                    lightIntensity: Math.round(Math.random() * 10) + 'uv',
+                    location: {
+                        lat: Math.ceil((Math.random() * 10) % 9),
+                        lng: Math.ceil((Math.random() * 10) % 9),
+                    },
+                });
+                client.publish('areas/area1/env-data', postData);
+
+            })
+        });
+    </script>
+</head>
+
+<body style="display:flex;justify-content: center;align-items: center">
+    <input type="button" value="send env data" id="submit">
+</body>
+
+</html>
