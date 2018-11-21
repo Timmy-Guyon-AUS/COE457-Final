@@ -30,11 +30,11 @@
                     location: {
                         // lat: pos.lat + Math.ceil((Math.random() * 10) % 9) - 4.5,
                         // lng: pos.lng + Math.ceil((Math.random() * 10) % 9) - 4.5,
-                        lat: 25.3131466 + Math.ceil((Math.random() * 10) % 9) - 4.5,
-                        lng: 55.4918937 + Math.ceil((Math.random() * 10) % 9) - 4.5,
+                        lat: 25.3131466 + ((Math.random() * 10) % 0.5) - 0.25,
+                        lng: 55.4918937 + ((Math.random() * 10) % 0.5) - 0.25,
                     },
                 });
-                client.publish('areas/area1/env-data', postData);
+                client.publish('areas/area2/env-data', postData);
 
             })
         });

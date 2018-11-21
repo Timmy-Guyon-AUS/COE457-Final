@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
   //   res.sendFile(__dirname + './views/browser-console/login.html');
   // }
 })
-app.get('/views', (req,res) => {
+app.get('/views', (req, res) => {
   console.log(req.session);
   res.sendFile(__dirname + './views/browser-console/login.html');
   // if (!req.session.loggedIn) {
@@ -50,6 +50,7 @@ app.get('/signup', (req, res) => {
 //
 const usersRoute = require("./routes/user");
 const alertsRoute = require("./routes/alert");
+const dangerZonesRoute = require("./routes/danger-zone");
 //
 //MQTT Subscribers - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 const alertSubscriber = require("./mqtt-clients/subscribers/alerts-subscriber.js");
@@ -92,6 +93,7 @@ app.use((req, res, next) => {
 //
 app.use("/user", usersRoute);
 app.use("/alert", alertsRoute);
+app.use(dangerZonesRoute);
 //
 //
 // catch 404 and forward to error handler

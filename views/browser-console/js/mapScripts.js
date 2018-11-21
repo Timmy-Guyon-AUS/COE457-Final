@@ -34,6 +34,8 @@ function initMap() {
   geocoder = new google.maps.Geocoder;
   errorInfoWindow = new google.maps.InfoWindow;
   //
+  loadDangerZones();
+  //
   initAlertListener();
 
   // Try HTML5 geolocation.
@@ -58,8 +60,12 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, errorInfoWindow, map.getCenter());
   }
-  
+
 }
+//
+loadDangerZones(pos);
+//
+initAlertListener();
 function handleLocationError(browserHasGeolocation, errorInfoWindow, pos) {
   errorInfoWindow.setPosition(pos);
   errorInfoWindow.setContent(browserHasGeolocation ?
@@ -260,34 +266,34 @@ function initAlertListener() {
   var succesfulinit = false;
 
 
-    $.getJSON("/alert/update-console", function (result) {
-      succesfulinit = true;
-      if (!pos || !pos.lat || !pos.lng) {
-        pos.lat = 25.3125056,
-          pos.lng = 55.4943655
+  $.getJSON("/alert/update-console", function (result) {
+    succesfulinit = true;
+    if (!pos || !pos.lat || !pos.lng) {
+      pos.lat = 25.3125056,
+        pos.lng = 55.4943655
+
+    }
+
+    result.map(function (alert) {
+      if (!dangerAlerts.some(function (loggedAlert) { return loggedAlert.UUID == alert.id })) {
+        var id, coords = {}, time;
+        if (alert) {
+          id = alert.id || undefined;
+          coords = alert.key.coords || {
+            lat: undefined, lng: undefined
+          };
+          coords.lat = pos.lat + ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
+          coords.lng = pos.lng + ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
+          time = alert.key.time;
+        }
+
+        var dangerAlert = new DangerAlert(id, coords, time);
+        drawAlertMarker(map, dangerAlert);
 
       }
+    })
 
-      result.map(function (alert) {
-        if (!dangerAlerts.some(function (loggedAlert) { return loggedAlert.UUID == alert.id })) {
-          var id, coords = {}, time;
-          if (alert) {
-            id = alert.id || undefined;
-            coords = alert.key.coords || {
-              lat: undefined, lng: undefined
-            };
-            coords.lat = pos.lat + ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
-            coords.lng = pos.lng + ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
-            time = alert.key.time;
-          }
-
-          var dangerAlert = new DangerAlert(id, coords, time);
-          drawAlertMarker(map, dangerAlert);
-          
-        }
-      })
-      
-    });
+  });
 
   // intervalId = setInterval(function () {
   //   $.getJSON("/alert/update-console", function (result) {
@@ -317,3 +323,56 @@ function initAlertListener() {
   // }, 10000);
 
 }
+var dangerZones = [];
+function loadDangerZones(pos) {
+  console.log(pos);
+
+
+
+  $.getJSON("/danger-zones/area2", function (result) {
+    succesfulinit = true;
+  
+
+    result.map(function (dangerZone) {
+      if (!dangerZones.some(function (loggedZone) { return loggedZone == dangerZone.id })) {
+        dangerZones.push(dangerZone.id);
+
+        // console.log(JSON.stringify(dangerZone));
+        console.log(dangerZone);
+        var cityCircle = new google.maps.Circle({
+          strokeColor: '#FF0000',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#FF0000',
+          fillOpacity: 0.35,
+          map: map,
+          center: dangerZone.value.location,
+          radius: Math.sqrt(dangerZone.value.temp) * 200
+        });
+        // var marker = new google.maps.Marker({
+        //   position: dangerZone.value.location,
+        //   map: map,
+        //   title: 'Hello World!',
+        //   status: 'initial',
+        //   icon: {
+        //     path: google.maps.SymbolPath.CIRCLE,
+        //     scale: 20,
+        //     fillColor: 'white',
+        //     fillOpacity: 1,
+        //     strokeWeight: 2,
+        //     strokeColor: 'red',
+        //   },
+        // });
+        // drawAlertMarker(map, dangerAlert);
+
+      }
+    })
+
+  });
+
+  
+
+}
+
+
+
