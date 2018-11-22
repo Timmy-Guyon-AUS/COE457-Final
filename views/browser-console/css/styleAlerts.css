@@ -1,114 +1,110 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 html {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
 }
 
 html,
 body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+      height: 100%;
+      margin: 0;
+      padding: 0;
 }
 
 #console-container {
-    height: calc(100% - 103px);
-    width: 100%;
-    display: flex;
-    align-items: center;
+      height: calc(100% - 103px);
+      width: 100%;
+      display: flex;
+      align-items: center;
 }
 
 #console-container #console-sidebar-container {
-    min-width: 300px;
-    width: auto;
-    height: 100%;
-    position: relative;
+      min-width: 300px;
+      width: auto;
+      height: 100%;
+      position: relative;
 }
 
 #console-container #console-sidebar-container #header-container {
-    position: absolute;
-    width: 300px;
+      position: absolute;
+      width: 300px;
 }
 
 #console-container #console-sidebar-container #header-container h1 {
-    padding: 9px;
-    margin: 0px;
-    text-align: center;
-    background-color: white;
-    z-index: 2;
+      padding: 9px;
+      margin: 0px;
+      text-align: center;
+      background-color: white;
+      z-index: 2;
 }
 
 #console-container #console-sidebar-container #header-container:after {
-    content: "";
-    width: 100%;
-    height: 0;
-    display: block;
-    position: absolute;
-    z-index: -1;
-    box-shadow: 0px 0px 8px 2px #000000;
-    opacity: 0.5;
+      content: "";
+      width: 100%;
+      height: 0;
+      display: block;
+      position: absolute;
+      z-index: -1;
+      box-shadow: 0px 0px 8px 2px #000000;
+      opacity: 0.5;
 }
 
 #console-container #console-sidebar-container #sidebar-list-container {
-    margin-top: 43px;
-    overflow: scroll;
-    height: calc(100% - 43px);
-
+      margin-top: 43px;
+      overflow: scroll;
+      height: calc(100% - 43px);
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol {
-    margin: 0;
-    padding-left: 0;
-    list-style-type: none;
+      margin: 0;
+      padding-left: 0;
+      list-style-type: none;
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li>div {
-    padding: 9px;
-    padding-right: 30px;
-    background-color: white;
-    transition: all ease-in-out 0.1s;
-    border-bottom: 1px solid lightgray;
-    position: relative;
-    z-index: 0;
+      padding: 9px;
+      padding-right: 30px;
+      background-color: white;
+      transition: all ease-in-out 0.1s;
+      border-bottom: 1px solid lightgray;
+      position: relative;
+      z-index: 0;
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li>div>span.status-indicator {
-    position: absolute;
-    /* width: 10px;
+      position: absolute;
+      /* width: 10px;
     height: 10px; */
-    /* box-shadow: inset 0 0 0 2px red; */
-    width: 8px;
-    height: 8px;
-    border: 2px solid red;
-    border-radius: 100px;
-    right: 10px;
-    top: calc(50% - 5px);
+      /* box-shadow: inset 0 0 0 2px red; */
+      width: 8px;
+      height: 8px;
+      border: 2px solid red;
+      border-radius: 100px;
+      right: 10px;
+      top: calc(50% - 5px);
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li:hover>div {
-    background-color: lightgray;
+      background-color: lightgray;
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li.danger-confirmed {
-    background-color: red;
-    color: white;
+      background-color: red;
+      color: white;
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li.danger-confirmed:hover {
-    background-color: darkred;
+      background-color: darkred;
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li.danger-alert-focused {
-    /* transform: scale(1.01); */
-    /* box-shadow: 0px 0px 8px 4px #000000; */
-    
-
+      /* transform: scale(1.01); */
+      /* box-shadow: 0px 0px 8px 4px #000000; */
 }
 
 #console-container #console-sidebar-container #sidebar-list-container ol li.danger-alert-focused div {
-    border: none;
-    box-shadow: inset 0 0 0 2px gray;
-    
+      border: none;
+      box-shadow: inset 0 0 0 2px gray;
 }
 
 /* #console-container #console-sidebar-container #sidebar-list-container ol li.danger-alert-focused:after {
@@ -125,21 +121,46 @@ body {
 } */
 
 #console-container #map-container {
-    height: 100%;
-    width: 100%;
-    max-width: calc(100% - 300px);
+      height: 100%;
+      width: 100%;
+      max-width: calc(100% - 300px);
 }
 
 #console-container #map-container #map {
-    height: 100%;
-    width: 100%;
+      height: 100%;
+      width: 100%;
 }
 
-.alert-infowindow, .gm-style-iw {
-    font-size: 20px !important;
+.alert-infowindow,
+.gm-style-iw {
+      font-size: 20px !important;
 }
 
 .alert-infowindow span {
-    display: block;
-    padding: 10px;
+      display: block;
+      padding: 10px;
+}
+
+.danger-zone-info-container {
+      background-color: #fff;
+      border: 2px solid red;
+      border-radius: 3px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+      cursor: pointer;
+      margin-bottom: 22px;
+      margin: 10px 10px 20px;
+      text-align: left;
+      opacity: 0;
+}
+.danger-zone-info-container.hovered {
+    opacity: 1;
+}
+
+.danger-zone-info-container .danger-zone-info {
+      color: rgb(25, 25, 25);
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 38px;
+      padding-left: 5px;
+      padding-right: 5px;
 }

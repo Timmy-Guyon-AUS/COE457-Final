@@ -1,5 +1,5 @@
 //initializing global variables
-var map, pos = { lat: null, lng: null }, geocoder, infoWindow = null, dangerAlerts = [], markers = [];
+var map, pos = { lat: null, lng: null }, geocoder, infoWindow = null, dangerAlerts = [], markers = [], centerControl, controlUI, centerControlDiv, controlText;
 //dangeralert class object
 class DangerAlert {
   constructor(UUID, location, creationTimeStamp) {
@@ -29,10 +29,19 @@ function initMap() {
   //assign global variables
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 25.312525, lng: 55.494408 },
-    zoom: 12
+    zoom: 12,
+    fullscreenControl: false
   });
   geocoder = new google.maps.Geocoder;
   errorInfoWindow = new google.maps.InfoWindow;
+  //
+  // Create the DIV to hold the control and call the CenterControl()
+  // constructor passing in this DIV.
+  centerControlDiv = document.createElement('div');
+  centerControl = new CenterControl(centerControlDiv, map);
+
+  centerControlDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
   //
   loadDangerZones();
   //
@@ -118,34 +127,7 @@ function drawAlertMarker(map, dangerAlert) {
     infoWindow.open(map, marker);
   });
 }
-function generateValidLocationPin(geocoder, locationPin) {
-  var pinPassed = false;
-  locationPin = new LocationPin(locationPin.lat + (Math.random() * 10 % 2 - 1), locationPin.lng - (Math.random() * 10 % 2 - 1));
-  var latlng = { lat: parseFloat(locationPin.lat + (Math.random() * 10 % 2 - 1)), lng: parseFloat(locationPin.lng) };
-  geocoder.geocode({ 'location': latlng }, function (results, status) {
-    if (status === 'OK') {
-      if (results[0]) {
-        // console.log(results);
-        var countryShortName = results[results.length - 1].address_components[0].short_name;
-        console.log(countryShortName);
-        String.toString(countryShortName) == "AE" ? pinPassed = true : pinPassed = false;
-        if (countryShortName == "AE") {
-          var pinPassed = true;
-          console.log("passed")
-        }
-      } else {
-        // window.alert('No results found');
-        // console.log('no results found');
-        // pinPassed = false;;
-      }
-    } else {
-      // window.alert('Geocoder failed due to: ' + status);
-      // console.log('geocoder failed due to: ' + status);
-      // pinPassed = false;
-    }
-  });
-  return pinPassed;
-}
+
 function closeOpenAlert() {
   //close open infowindows
   if (infoWindow) {
@@ -154,7 +136,6 @@ function closeOpenAlert() {
   //remove class from <li>
   var activeAlertLis = document.getElementsByClassName('danger-alert-focused');
   if (activeAlertLis.length > 0) {
-
     for (i = 0; i < activeAlertLis.length; i++) {
       activeAlertLis[i].classList.remove('danger-alert-focused')
     }
@@ -186,13 +167,7 @@ var onClickFunction = function () {
     infoWindow.open(map, correspondingMarker);
   }
 }
-// contentString = function(dangerAlert) {
-//   var contentString = '<div class="sidebarLi status-' + dangerAlert.status + 'id="sidebarLi-' + dangerAlert.UUID + '">                                    <span style = "display:block">Alert ID: ' + dangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + dangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + dangerAlert.status + '</span>  <span class="status-indicator"></span></div>';
-//   return contentString;
-
-// }
-//
-//
+// 
 function updateSidebar(correspondingDangerAlert, addOrRemove) {
   if (addOrRemove) {
     var consoleSidebarOL = document.getElementById('console-sidebar-ol');
@@ -323,6 +298,26 @@ function initAlertListener() {
 
 }
 var dangerZones = [];
+function CenterControl(controlDiv, map) {
+
+  // Set CSS for the control border.
+  controlUI = document.createElement('div');
+  controlUI.className = 'danger-zone-info-container';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control interior.
+  controlText = document.createElement('div');
+  controlText.className = 'danger-zone-info'
+  controlText.innerHTML = 'Center Map';
+  controlUI.appendChild(controlText);
+
+
+  // Setup the click event listeners: simply set the map to Chicago.
+  // controlUI.addEventListener('click', function () {
+  //   map.setCenter(chicago);
+  // });
+
+}
 function loadDangerZones(pos) {
   console.log(pos);
   $.getJSON("/danger-zones/area2", function (result) {
@@ -330,9 +325,6 @@ function loadDangerZones(pos) {
     result.map(function (dangerZone) {
       if (!dangerZones.some(function (loggedZone) { return loggedZone == dangerZone.id })) {
         dangerZones.push(dangerZone.id);
-
-        // console.log(JSON.stringify(dangerZone));
-        console.log(dangerZone);
         var cityCircle = new google.maps.Circle({
           strokeColor: '#FF0000',
           strokeOpacity: 0.8,
@@ -343,6 +335,23 @@ function loadDangerZones(pos) {
           center: dangerZone.value.location,
           radius: Math.sqrt(dangerZone.value.temp) * 200
         });
+        var infoUL = document.createElement('ul');
+        var tempLi = document.createElement('li');
+        tempLi.innerHTML = 'temp: ' + dangerZone.value.temp + ' degrees';
+        var humidityLi = document.createElement('li');
+        humidityLi.innerHTML = 'humidity: ' + dangerZone.value.humidity;
+        infoUL.appendChild(tempLi);
+        infoUL.appendChild(humidityLi);
+
+        cityCircle.addListener('mouseover', function () {
+          controlText.innerHTML = '';
+          controlText.appendChild(infoUL);
+          controlUI.classList.add('hovered');
+        })
+        cityCircle.addListener('mouseout', function () {
+          controlText.innerHTML = 'yo';
+          controlUI.classList.remove('hovered');
+        })
       }
     })
 
