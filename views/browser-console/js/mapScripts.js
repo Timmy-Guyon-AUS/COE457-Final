@@ -93,7 +93,7 @@ function drawAlertMarker(map, dangerAlert) {
   //add to array
   markers.push(marker);
   //content string for infoWindow
-  var contentString = '<div class="alert-infowindow" id="infoWindow-' + dangerAlert.UUID + '" >                                             <span>Alert ID: ' + dangerAlert.UUID + '</span>                      <span>Created at:  ' + new Date(dangerAlert.creationTimeStamp).getDate() + '</span>   <span>Status:  ' + dangerAlert.status + '</span>                        <span><button>Respond</button>                                                               </div>';
+  var contentString = '<div class="alert-infowindow" id="infoWindow-' + dangerAlert.UUID + '" >                                             <span>Alert ID: ' + dangerAlert.UUID + '</span>                      <span>Created at:  ' + new Date(dangerAlert.creationTimeStamp).toLocaleString() + '</span>   <span>Status:  ' + dangerAlert.status + '</span>                        <span><button>Respond</button>                                                               </div>';
   //add click event to marker
   marker.addListener('click', function () {
     closeOpenAlert();
@@ -173,7 +173,7 @@ var onClickFunction = function () {
     var correspondingDangerAlert = dangerAlerts.find(function (element) {
       return element.UUID == thisLi.getAttributeNode('data-uuid').value;
     });
-    var contentString = '<div id="infoWindow-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + correspondingDangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span><button>Respond</button></div>';
+    var contentString = '<div id="infoWindow-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + new Date(correspondingDangerAlert.creationTimeStamp).toLocaleString() + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span><button>Respond</button></div>';
     //
     if (infoWindow) {
       infoWindow.close();
@@ -182,7 +182,6 @@ var onClickFunction = function () {
       content: contentString
     });
     var button = infoWindow.content;
-    console.log(button)
     map.panTo(correspondingMarker.position);
     infoWindow.open(map, correspondingMarker);
   }
@@ -198,7 +197,7 @@ function updateSidebar(correspondingDangerAlert, addOrRemove) {
   if (addOrRemove) {
     var consoleSidebarOL = document.getElementById('console-sidebar-ol');
     var li = document.createElement('li');
-    var contentString = '<div class="sidebarLi status-' + correspondingDangerAlert.status + 'id="sidebarLi-' + correspondingDangerAlert.UUID + '">                                    <span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + correspondingDangerAlert.creationTimeStamp + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span>  <span class="status-indicator"></span><button onclick=respondFunction(' + correspondingDangerAlert.UUID + ')>Respond</button></div>';
+    var contentString = '<div class="sidebarLi status-' + correspondingDangerAlert.status + 'id="sidebarLi-' + correspondingDangerAlert.UUID + '">                                    <span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + new Date(correspondingDangerAlert.creationTimeStamp).toLocaleString() + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span>  <span class="status-indicator"></span><button onclick=respondFunction(' + correspondingDangerAlert.UUID + ')>Respond</button></div>';
     var div = document.createElement('div');
     li.innerHTML = contentString;
     //add ID that will associate it with marker on map
@@ -326,13 +325,8 @@ function initAlertListener() {
 var dangerZones = [];
 function loadDangerZones(pos) {
   console.log(pos);
-
-
-
   $.getJSON("/danger-zones/area2", function (result) {
     succesfulinit = true;
-  
-
     result.map(function (dangerZone) {
       if (!dangerZones.some(function (loggedZone) { return loggedZone == dangerZone.id })) {
         dangerZones.push(dangerZone.id);
@@ -349,29 +343,10 @@ function loadDangerZones(pos) {
           center: dangerZone.value.location,
           radius: Math.sqrt(dangerZone.value.temp) * 200
         });
-        // var marker = new google.maps.Marker({
-        //   position: dangerZone.value.location,
-        //   map: map,
-        //   title: 'Hello World!',
-        //   status: 'initial',
-        //   icon: {
-        //     path: google.maps.SymbolPath.CIRCLE,
-        //     scale: 20,
-        //     fillColor: 'white',
-        //     fillOpacity: 1,
-        //     strokeWeight: 2,
-        //     strokeColor: 'red',
-        //   },
-        // });
-        // drawAlertMarker(map, dangerAlert);
-
       }
     })
 
   });
-
-  
-
 }
 
 
