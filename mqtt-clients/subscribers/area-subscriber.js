@@ -66,7 +66,6 @@ client.on('message', function (topic, message) {
             areasDB.insert(envData, function (err, body, header) {
                   if (err) {
                         console.log('[areasDB.insert] ', err.message);
-                        res.send("Error");
                         return;
                   }
                   envData._id = body.id;

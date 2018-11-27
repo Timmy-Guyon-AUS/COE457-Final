@@ -154,7 +154,7 @@ var onClickFunction = function () {
     var correspondingDangerAlert = dangerAlerts.find(function (element) {
       return element.UUID == thisLi.getAttributeNode('data-uuid').value;
     });
-    var contentString = '<div id="infoWindow-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + new Date(correspondingDangerAlert.creationTimeStamp).toLocaleString() + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span><button>Respond</button></div>';
+    var contentString = '<div class="alert-infowindow" id="infoWindow-' + correspondingDangerAlert.UUID + '"><span style = "display:block">Alert ID: ' + correspondingDangerAlert.UUID + '</span><span style = "display:block">Created at:  ' + new Date(correspondingDangerAlert.creationTimeStamp).toLocaleString() + '</span><span style = "display:block">Status:  ' + correspondingDangerAlert.status + '</span><button>Respond</button></div>';
     //
     if (infoWindow) {
       infoWindow.close();
@@ -253,12 +253,12 @@ function initAlertListener() {
         var id, coords = {}, time;
         if (alert) {
           id = alert.id || undefined;
-          coords = alert.key.coords || {
+          coords = alert.value.coords || {
             lat: undefined, lng: undefined
           };
           coords.lat = pos.lat + ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
           coords.lng = pos.lng + ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
-          time = alert.key.time;
+          time = alert.value.time;
         }
 
         var dangerAlert = new DangerAlert(id, coords, time);

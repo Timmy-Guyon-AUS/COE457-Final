@@ -97,10 +97,6 @@ body {
       background-color: darkred;
 }
 
-#console-container #console-sidebar-container #sidebar-list-container ol li.danger-alert-focused {
-      /* transform: scale(1.01); */
-      /* box-shadow: 0px 0px 8px 4px #000000; */
-}
 
 #console-container #console-sidebar-container #sidebar-list-container ol li.danger-alert-focused div {
       border: none;
