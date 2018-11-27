@@ -59,6 +59,7 @@ client.on('message', function (topic, message) {
       // insert alert into alertsDB
       console.log("messaged recieved to topic: " + topic + " " + message);
       var alert = JSON.parse(message.toString());
+      
       if (alertsDB) {
             if(!alert.status){
                   alert.status = 'initial';
@@ -66,7 +67,6 @@ client.on('message', function (topic, message) {
             alertsDB.insert(alert, function (err, body, header) {
                   if (err) {
                         console.log('[alertsDB.insert] ', err.message);
-                        res.send("Error");
                         return;
                   }
                   alert._id = body.id;
