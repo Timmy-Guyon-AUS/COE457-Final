@@ -23,6 +23,7 @@ body {
       width: auto;
       height: 100%;
       position: relative;
+      display: none;
 }
 
 #console-container #console-sidebar-container #header-container {
@@ -119,7 +120,7 @@ body {
 #console-container #map-container {
       height: 100%;
       width: 100%;
-      max-width: calc(100% - 300px);
+      /* max-width: calc(100% - 300px); */
 }
 
 #console-container #map-container #map {
