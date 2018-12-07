@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--Link Index.html to style css and main js files-->
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/main.js"></script>
+</head>
+
+<!--Page Belongs to red background pages css class -->
+
+<body class="redBG">
+
+    <!--Display the Text: -->
+    <p> <b> DANGER CONFIRMED </b> 
+    </p>
+
+    <!--Display the danger image in big size or "Danger Sign!" if image was not found -->
+    <img id="bigSize" src="images/red_danger_icon.png" alt="Danger Sign!" onclick="tizen.application.getCurrentApplication().exit()">
+
+    <!--Display the "I am safe now" button and call "CheckIfSafe() on button click -->
+    <button id="greenButton" onClick="CheckIfSafe()">I am safe now</button>
+    <br>
+
+</body>
+
+</html>

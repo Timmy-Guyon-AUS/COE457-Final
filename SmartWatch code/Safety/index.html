@@ -1,0 +1,103 @@
+<DOCTYPE! html>
+    <html>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+        <!--Link Index.html to style css and main js files-->
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="js/main.js"></script>
+        <script src="js/mqttws31.js"></script>
+        <script src="js/myapp.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.3.2.js"></script>
+
+        <!--Page Belongs to red background pages css class -->
+
+    <body class="redBG">
+
+        <!--Display the danger image or "Danger Sign!" if image was not found -->
+        <img src="images/red_danger_icon.png" alt="Danger Sign!">
+
+        <!--Display the Text: -->
+        <p><b> ARE YOU IN DANGER? </b>
+        </p>
+
+        <!--Display the buttons and call their corresponding onClick() functions from main js 
+            button ids are used to give each buttons different styles -->
+        <button id="redButton" onClick="inDanger('confirmed')">Yes, I am in danger</button>
+        <br>
+        <!--line break-->
+        <button id="greenButton" onClick="CheckIfSafe()">No, I am safe</button>
+        <br>
+        <span id="time">10</span>
+
+
+        <script type="text/javascript">
+            window.onload = function WindowLoad(event) {
+
+                websocketclient.connect();
+                console.log('client connected');
+            }
+
+            /* keep screen on even if no user activity is detected */
+            tizen.power.request("SCREEN", "SCREEN_NORMAL");
+
+            /* Vibrate when app starts to inform the user */
+            navigator.vibrate([1000, 2000, 1000]);
+
+            var done = false;
+
+            /* Timer to send SOS message */
+            function startTimer(duration, display) {
+                var timer = duration, seconds;
+                setInterval(function () {
+                    seconds = parseInt(timer % 60, 10);
+
+                    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                    if (!done) {
+                        display.text(seconds);
+                    }
+
+                    // if woman does not respond, send an unconfirmed alert
+                    if (seconds == 0) {
+                        if (!done) {
+                            inDanger('unconfirmed');
+                            display.text('');
+
+                        }
+                        done = true; // used to only publish once
+                    }
+
+                    if (--timer < 0) {
+                        timer = duration;
+                    }
+                }, 1000);
+            }
+            //run only once
+            if (!done) {
+                jQuery(function ($) {
+                    var duration = 10,
+                        display = $('#time');
+                    startTimer(duration, display);
+                });
+            }
+        </script>
+
+        <script type="text/javascript">
+
+            /* bezel rotation event */
+            rotaryDetentCallback = function rotaryDetentHandler(e) {
+                var direction = e.detail.direction;
+                if (direction === "CW") {
+                    console.log("<-");
+                } else if (direction === "CCW") {
+                    window.open("SafetyConfirmed.html", "_self"); //open in the same window
+                }
+            };
+            window.addEventListener("rotarydetent", rotaryDetentCallback);
+        </script>
+
+    </body>
+
+    </html>

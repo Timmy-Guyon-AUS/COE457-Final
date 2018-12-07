@@ -1,0 +1,104 @@
+
+/* style the body */ 
+body {
+    color: white;
+    text-align: center;
+    font-size: xx-large;
+	font-family: Arial, sans-serif;
+}
+
+
+/* style all images  */
+img { 
+    margin-left: auto;
+    margin-right:auto;
+    width: 50px;
+    height: 50px;
+    display:block;
+}
+
+/* style paragraph elements  */
+p {
+	width: 80%;
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* style pages with red background  */
+.redBG {
+	background-color: rgb(250, 0, 0);
+	-webkit-animation: BLINKK 1.5s infinite;  /* Safari 4+ */
+ 	-moz-animation: BLINKK 1.5s infinite;  /* Fx 5+ */
+  	-o-animation: BLINKK 1.5s infinite;  /* Opera 12+ */
+  	animation: BLINKK 1.5s infinite;  /* IE 10+, Fx 29+ */
+}
+
+/* blinking background for red pages */
+@-webkit-keyframes BLINKK {
+  0%, 49% {
+    background-color: red;
+  }
+  50%, 100% {
+    background-color: rgb(229,0,0);
+  }
+}
+
+/* style pages with green background  */
+.greenBG {
+	  background-color: rgb(0, 230, 30);
+}
+
+/* specific red buttons style  */
+#redButton{
+	color: rgb(250, 40, 10);
+	border: 5px solid rgb(250, 40, 10);
+	padding: 10px 10px;
+}
+
+/* specific green buttons style  */
+#greenButton{
+	color: rgb(50,210,50);
+	border: 3px solid  rgb(0, 250, 50);
+	font-size: large;
+	padding: 5px 5px;
+}
+
+#redButton:active{
+	color: white;
+	background-color: rgb(250, 40, 10);
+	border: 5px solid white;	
+}
+
+#greenButton:active{
+	color: white;
+	background-color: rgb(0, 250, 50);
+	border: 3px solid white;	
+}
+
+/* style images of big display size  */
+#bigSize
+{
+	width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+/* style of clicking the green tick button */
+#bigSize:active{
+	opacity: 0.5;	
+}
+
+/* style buttons  */
+button {
+    background-color: white;
+    margin: 5px 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: x-large;
+    border-radius: 30px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+

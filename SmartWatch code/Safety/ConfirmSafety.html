@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--Link Index.html to Cstyle css and main js files-->
+    <link rel="stylesheet" type="text/css" href="css/Cstyle.css" />
+    <script src="js/main.js"></script>
+
+    <!--Link Index.html to jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.5/jquery.mobile.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.3.2.js" ></script>
+</head>
+
+<body>
+    <br>
+    <br>
+
+    <!-- Display Text:-->
+    <h3><b>CONFIRM SAFETY</b></h3>
+
+    <!-- Number Pad input-->
+    <div class="numberPad">
+        <ul class="numberList clearfix">
+            <li class="digit">1</li>
+            <li class="digit">2</li>
+            <li class="digit">3</li>
+            <li class="digit">4</li>
+            <li class="digit">5</li>
+            <li class="digit">6</li>
+            <li class="digit">7</li>
+            <li class="digit">8</li>
+            <li class="digit">9</li>
+            <li class="digit">0</li>
+        </ul>
+        
+        <br> <br> <br> <br> <br>
+        <p>ENTER PIN TO CALL OFF SOS RESPONSE</p>
+        
+    </div>
+
+    <script>
+
+        /* Validate the user PIN entry */
+         var fullpin = "";
+                var pinstr = "";
+                var count = 0;
+
+                jQuery(document).ready(function () {
+                    jQuery('.numberList .digit').click(function () {
+                        var numVal = jQuery(this).html();
+                        count++;
+        
+                        if (count == 4) {
+                            fullpin = pinstr + numVal;
+        
+                            if (fullpin === "1234") {
+                                window.open("SafetyConfirmed.html", "_self");
+                            }
+                            else if (fullpin === "5678") {
+                                window.open("SafetyConfirmed.html", "_self" );
+                               //getGPSLocation();
+                            }
+                            else {
+                                alert("Wrong PIN! Please try again");
+                                pinstr = "";
+                                numVal = "";
+                                count = 0;
+                            }
+                        };
+        
+                        pinstr = pinstr + numVal;
+                    });
+                });
+    </script>
+ 
+	<script>
+                /* If the watch's bezel is rotated */
+                document.addEventListener('rotarydetent', function (ev) {
+                    var direction = ev.detail.direction;
+                    /* Add behavior for detent detected event with a direction value */
+        
+                    //if user accidentally presses 'safebutton' and wants to go back to dangerPage
+                    if (direction == 'CW' || direction == 'CCW') {
+                        //window.open("DangerConfirmed.html", "_self"); //open in the same window
+                        inDanger('confirmed'); // depends on what we will do
+                    }
+                });
+    </script>
+
+</body>
+
+</html>
+

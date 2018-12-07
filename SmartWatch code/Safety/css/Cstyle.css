@@ -1,0 +1,72 @@
+/*the grey thing*/
+.clearfix:before,.clearfix:after{
+ display: table;
+ clear : both;
+ height : 0px;
+ content : "";
+ }
+
+/*also the grey thing*/
+.numberPad{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    background-color: #9a99;
+}
+
+/*all numbers together*/
+.numberList{
+  margin: auto;
+  list-style-type:none;
+  width:80%;
+  position: absolute;
+  right: 20px;
+  left: 0px;
+  display: block;
+}
+
+/*each number*/
+.numberList li{
+  display: block;
+  width:50px;
+  height: 50px;
+  margin: 0.05%;
+  text-align:center;
+  font-size: xx-large;
+  font-family: Arial, sans-serif;
+  float:left;
+  color: #fff;
+  cursor : pointer;
+  background-color: rgb(41, 198, 57);
+  border: 2px solid #fff;
+  border-radius:50%; /*make them circles*/
+  line-height: 50px; /*this moved the numbers*/
+}
+
+.numberList li:active{
+/*	
+  background-color: #333366;*/
+  background-color: #fff;
+  color: rgb(41, 198, 57);
+  font-size: 250%;
+}
+
+/* style the body */
+body {
+	align-content: center;
+	color: white;
+    text-align: center;
+    font-size: large;
+	font-family: Arial, sans-serif;
+	background-color: rgb(0, 230, 30);
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+}
+
+/* style bolded elements */
+b {
+	font-size: xx-large;
+}
