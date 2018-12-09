@@ -1,7 +1,22 @@
 //
 //Middleware - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 var mqtt = require('mqtt');
-var client = mqtt.connect('mqtt://test.mosquitto.org');
+var options = {
+      port: 11330,
+      host: 'mqtt://m15.cloudmqtt.com',
+      clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+      username: 'ouaqwvoe',
+      password: 'IGPhMUpKbZMP',
+      keepalive: 60,
+      reconnectPeriod: 1000,
+      protocolId: 'MQIsdp',
+      protocolVersion: 3,
+      clean: true,
+      encoding: 'utf8'
+};
+
+var client = mqtt.connect('mqtt://m15.cloudmqtt.com', options);
+
 var cfenv = require("cfenv");
 //
 //IBM Cloud Foundry App Config Variables- - - - - - - - - - - - - - - - - - - - 
@@ -49,27 +64,104 @@ if (cloudant) {
 
 }
 // Cloudant db setup ^
-//MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 client.on('connect', function () {
-      client.subscribe('areas/+/env-data', function (err) {
-
-      })
-})
-
-client.on('message', function (topic, message) {
-      // insert alert into areasDB
-      var topicArray = topic.split("/");
-      var envData = JSON.parse(message.toString());
-      envData.area = topicArray[1];
-      console.log(envData);
-      if (areasDB) {
-            areasDB.insert(envData, function (err, body, header) {
-                  if (err) {
-                        console.log('[areasDB.insert] ', err.message);
-                        return;
+      console.log('connected..');
+      // subscribe to a topic
+      client2.subscribe('esp32/#', function () {
+            var i = 0;
+            client2.on('message', function (topic, message, packet) {
+                  t = topic.split("/");
+                  //store the message in a variable based on the topic
+                  if (t[2] == "temperature") {
+                        temp = message.toString();
+                        i++;
                   }
-                  envData._id = body.id;
+                  else if (t[2] == "humidity") {
+                        humi = message.toString();
+                        i++;
+                  }
+                  else if (t[2] == "light") {
+                        lightint = message.toString();
+                        i++;
+                  }
+                  else if (t[2] == "location") {
+                        loc = message.toString().split(",");
+                        i++;
+                  }
+                  if (i == 4) { //if all values have been sent, add the value to the databse
+                        addEnvData();
+                  }
+                  areaname = t[1]; //area1, area2,...
             });
+      });
+});
+
+function addEnvData() {
+      response = {
+            time: new Date().toLocaleString(),
+            temperature: temp,
+            humidity: humi,
+            lightintensity: lightint,
+            location: {
+                  lat: loc[0],
+                  lng: loc[1],
+            },
+            area: areaname
+      };
+
+      id = areaname
+
+      areasDB.insert(response, id, function (err, body, header) {
+            if (err) {
+                  //when values are published from the same area (microcontroller), update the values in the db 
+                  if (err.message == "Document update conflict.") {
+                        updateAreaInfo();
+                  }
+            }
+      });
+}
+
+//update(overwrite) the values in the db for a given area
+let updateAreaInfo = async () => {
+      try {
+            let doc = await areaSafety.get(areaname)
+            doc.time = new Date().toLocaleString();
+            doc.temperature = temp;
+            doc.humidity = humi;
+            doc.lightintensity = lightint
+            doc.location = {
+                  "lat": loc[0],
+                  "lng": loc[1]
+            }
+            areasDB.insert(doc);
+
+      } catch (err) {
+            console.log(err);
       }
-})
+}
+
+//MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// client.on('connect', function () {
+//       client.subscribe('areas/+/env-data', function (err) {
+
+//       })
+// })
+
+// client.on('message', function (topic, message) {
+//       // insert alert into areasDB
+//       var topicArray = topic.split("/");
+//       var envData = JSON.parse(message.toString());
+//       envData.area = topicArray[1];
+//       console.log(envData);
+//       if (areasDB) {
+//             areasDB.insert(envData, function (err, body, header) {
+//                   if (err) {
+//                         console.log('[areasDB.insert] ', err.message);
+//                         return;
+//                   }
+//                   envData._id = body.id;
+//             });
+//       }
+// })
 module.exports = client;

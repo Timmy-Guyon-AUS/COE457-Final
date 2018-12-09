@@ -61,7 +61,7 @@ client.on('connect', function () {
     
     
 // receiving a topic
-client1.on('message', function (topic, message) {
+client.on('message', function (topic, message) {
       // message is Buffer
     
         console.log('Topic: ' + topic.toString() + '\t');
@@ -101,5 +101,5 @@ client1.on('message', function (topic, message) {
 //                   alert._id = body.id;
 //             });
 //       }
-})
+//})
 module.exports = client;
