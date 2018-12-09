@@ -133,6 +133,7 @@ let updateAreaInfo = async () => {
             doc.location = {
                   "lat": loc[0],
                   "lng": loc[1]
+                  
             }
             areasDB.insert(doc);
 
