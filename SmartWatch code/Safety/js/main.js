@@ -18,11 +18,21 @@ function inDanger(alertStatus) {
   dateTime = tizen.time.getCurrentDateTime();
 
   // ********* send data over mqtt *****************
-  websocketclient.publish('S2watch/w1/alert_status', alertStatus, 1, false);
-  websocketclient.publish('S2watch/w1/dateTime', dateTime.toString(), 1, false);
+  // websocketclient.publish('S2watch/w1/alert_status', alertStatus, 1, false);
+  // websocketclient.publish('S2watch/w1/dateTime', dateTime.toString(), 1, false);
+  var postData = JSON.stringify({
+    time: new Date().getTime(),
+    coords: {
+      lat: Math.ceil((Math.random() * 10) % 9),
+      lng: Math.ceil((Math.random() * 10) % 9),
+    },
+    status: 'initial'
+
+  });
+  websocketclient.publish('alert/initial-alert', postData);
 
   //getGPSLocation();
-  window.open("DangerConfirmed.html", "_self" );
+  window.open("DangerConfirmed.html", "_self");
 }
 
 //Gets user location
@@ -68,8 +78,8 @@ function success(position) {
   console.log("Current position Test: " + lat + " " + lng);
   console.log('after GPS')
 
-  alert('Success' + lat + " " + lng);
-  websocketclient.publish('S2watch/w1/location', "position: " + lat + " " + lng, 1, false);
+  // alert('Success' + lat + " " + lng);
+  // websocketclient.publish('S2watch/w1/location', "position: " + lat + " " + lng, 1, false);
 
   window.open("DangerConfirmed.html", "_self");
   tizen.power.release("SCREEN"); // allow screen to go off in case of no activity
