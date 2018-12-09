@@ -68,9 +68,9 @@ if (cloudant) {
 client.on('connect', function () {
       console.log('connected..');
       // subscribe to a topic
-      client2.subscribe('esp32/#', function () {
+      client.subscribe('esp32/#', function () {
             var i = 0;
-            client2.on('message', function (topic, message, packet) {
+            client.on('message', function (topic, message, packet) {
                   t = topic.split("/");
                   //store the message in a variable based on the topic
                   if (t[2] == "temperature") {
