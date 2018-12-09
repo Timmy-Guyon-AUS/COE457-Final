@@ -91,8 +91,8 @@ function drawAlertMarker(map, dangerAlert) {
     UUID: dangerAlert.UUID,
     status: 'initial',
     icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 5,
+      // path: google.maps.SymbolPath.CIRCLE,
+      scale: 2,
       fillColor: 'white',
       fillOpacity: 1,
       strokeWeight: 2,
@@ -329,13 +329,14 @@ function loadDangerZones(pos) {
           strokeColor: '#FF0000',
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: '#FF0000',
+          fillColor: '#8DA3AD',
           fillOpacity: 0.35,
           map: map,
           center: dangerZone.value.location,
           radius: Math.sqrt(dangerZone.value.temp) * 200
         });
         var infoUL = document.createElement('ul');
+        infoUL.classList.add('dangerZoneUl')
         var tempLi = document.createElement('li');
         tempLi.innerHTML = 'temp: ' + dangerZone.value.temp + ' degrees';
         var humidityLi = document.createElement('li');
@@ -349,7 +350,7 @@ function loadDangerZones(pos) {
           controlUI.classList.add('hovered');
         })
         cityCircle.addListener('mouseout', function () {
-          controlText.innerHTML = 'yo';
+          // controlText.innerHTML = 'yo';
           controlUI.classList.remove('hovered');
         })
       }
