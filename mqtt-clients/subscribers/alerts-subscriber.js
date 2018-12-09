@@ -53,9 +53,11 @@ if (cloudant) {
 // subscribing to a topic
 client.on('connect', function () {
       console.log('connected...' + '\n');
-      client.subscribe('S2watch/#', function (err) {
+      client.subscribe('alert/initial-alert', function (err) {
             if (err) {
                   console.log('error in subscribing');
+            }else{
+                  console.log('success in subbing')
             }
       })
 });

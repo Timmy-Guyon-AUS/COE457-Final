@@ -29,7 +29,7 @@ function inDanger(alertStatus) {
     status: 'initial'
 
   });
-  websocketclient.publish('alert/initial-alert', postData);
+  websocketclient.publish('alert/initial-alert', postData, 1, false);
 
   //getGPSLocation();
   window.open("DangerConfirmed.html", "_self");

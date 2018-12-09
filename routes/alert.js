@@ -86,7 +86,7 @@ router.get("/update-console", (req, res) => {
   alertsDB.view('browser-side-views', 'view-all-alerts-date-sorted', { descending: "true" }, function (err, body) {
     if (!err) {
       var rows = body.rows; //the rows returned
-      console.log(rows);
+      // console.log(rows);
       res.end(JSON.stringify(rows))
     } else {
       console.log(err);
