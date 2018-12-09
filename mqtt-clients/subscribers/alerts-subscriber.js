@@ -1,7 +1,7 @@
 //
 //Middleware - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 var mqtt = require('mqtt');
-var client = mqtt.connect('mqtt://test.mosquitto.org');
+var client = mqtt.connect('mqtt://broker.mqttdashboard.com');
 var cfenv = require("cfenv");
 //
 //IBM Cloud Foundry App Config Variables- - - - - - - - - - - - - - - - - - - - 
@@ -48,29 +48,58 @@ if (cloudant) {
       alertsDB = cloudant.db.use(alertsDBName);
 }
 //Db setup ^
-//MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+// subscribing to a topic
 client.on('connect', function () {
-      client.subscribe('alert/initial-alert', function (err) {
-
+      console.log('connected...' + '\n');
+      client.subscribe('S2watch/#', function (err) {
+        if (err) {
+          console.log('error in subscribing');
+        }
       })
-})
-
-client.on('message', function (topic, message) {
-      // insert alert into alertsDB
-      console.log("messaged recieved to topic: " + topic + " " + message);
-      var alert = JSON.parse(message.toString());
+    });
+    
+    
+// receiving a topic
+client1.on('message', function (topic, message) {
+      // message is Buffer
+    
+        console.log('Topic: ' + topic.toString() + '\t');
+        console.log('Mssge: ' + message.toString())
+    
+        var alert = JSON.parse(message.toString());
+    if (alertsDB) {
+               if(!alert.status){
+                     alert.status = 'initial';
+               }
+               alertsDB.insert(alert, function (err, body, header) {
+                     if (err) {
+                           console.log('[alertsDB.insert] ', err.message);
+                           res.send("Error");
+                           return;
+                     }
+                     alert._id = body.id;
+               });
+         }
+    
+    });
+        
+// client.on('message', function (topic, message) {
+//       // insert alert into alertsDB
+//       console.log("messaged recieved to topic: " + topic + " " + message);
+//       var alert = JSON.parse(message.toString());
       
-      if (alertsDB) {
-            if(!alert.status){
-                  alert.status = 'initial';
-            }
-            alertsDB.insert(alert, function (err, body, header) {
-                  if (err) {
-                        console.log('[alertsDB.insert] ', err.message);
-                        return;
-                  }
-                  alert._id = body.id;
-            });
-      }
+//       if (alertsDB) {
+//             if(!alert.status){
+//                   alert.status = 'initial';
+//             }
+//             alertsDB.insert(alert, function (err, body, header) {
+//                   if (err) {
+//                         console.log('[alertsDB.insert] ', err.message);
+//                         return;
+//                   }
+//                   alert._id = body.id;
+//             });
+//       }
 })
 module.exports = client;
