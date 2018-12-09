@@ -8,6 +8,7 @@ var cfenv = require("cfenv");
 //load local VCAP configuration  and service credentials
 var alertsDB;
 var vcapLocal;
+
 try {
       vcapLocal = require('./vcap-local.json');
       console.log("Loaded local VCAP", vcapLocal);
@@ -53,42 +54,44 @@ if (cloudant) {
 client.on('connect', function () {
       console.log('connected...' + '\n');
       client.subscribe('S2watch/#', function (err) {
-        if (err) {
-          console.log('error in subscribing');
-        }
+            if (err) {
+                  console.log('error in subscribing');
+            }
       })
-    });
-    
-    
+});
+
+
 // receiving a topic
 client.on('message', function (topic, message) {
       // message is Buffer
-    
-        console.log('Topic: ' + topic.toString() + '\t');
-        console.log('Mssge: ' + message.toString())
-    
-        var alert = JSON.parse(message.toString());
-    if (alertsDB) {
-               if(!alert.status){
-                     alert.status = 'initial';
-               }
-               alertsDB.insert(alert, function (err, body, header) {
-                     if (err) {
-                           console.log('[alertsDB.insert] ', err.message);
-                           res.send("Error");
-                           return;
-                     }
-                     alert._id = body.id;
-               });
-         }
-    
-    });
-        
+
+      console.log('Topic: ' + topic.toString() + '\t');
+      console.log('Mssge: ' + message.toString())
+
+      // var alert = JSON.parse(message);
+      var alert = message;
+
+      if (alertsDB) {
+            if (!alert.status) {
+                  alert.status = 'initial';
+            }
+            alertsDB.insert(alert, function (err, body, header) {
+                  if (err) {
+                        console.log('[alertsDB.insert] ', err.message);
+                        res.send("Error");
+                        return;
+                  }
+                  alert._id = body.id;
+            });
+      }
+
+});
+
 // client.on('message', function (topic, message) {
 //       // insert alert into alertsDB
 //       console.log("messaged recieved to topic: " + topic + " " + message);
 //       var alert = JSON.parse(message.toString());
-      
+
 //       if (alertsDB) {
 //             if(!alert.status){
 //                   alert.status = 'initial';
@@ -101,5 +104,5 @@ client.on('message', function (topic, message) {
 //                   alert._id = body.id;
 //             });
 //       }
-//})
+// })
 module.exports = client;
