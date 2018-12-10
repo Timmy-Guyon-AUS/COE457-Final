@@ -4,50 +4,82 @@ const express = require("express");
 const app = express();
 var cors = require('cors');
 const bodyParser = require('body-parser')
-const expressSession = require("express-session");
-// var cookieParser = require('cookie-parser');
-// var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 //
 app.set('port', process.env.PORT || 2500);
 app.use(cors());
 app.use(express.static(__dirname));
 // app.use(session({secret: 'ssshhhhh'}));
+app.use(
+  session({
+    secret: "shhhh",
+    cookie: {
+      maxAge: 60000
+    },
+    resave: false,
+    saveUninitialized: true
+  })
+);
 //
+
 //Routes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-app.get('/', (req, res) => {
-  console.log(req.session);
-  res.sendFile(__dirname + './views/browser-console/tabs.html');
-  // if (req.session.loggedIn) {
-  //   res.sendFile(__dirname + './views/browser-console/tabs.html');
-  // } else {
-  //   res.sendFile(__dirname + './views/browser-console/login.html');
-  // }
-})
-app.get('/views', (req, res) => {
-  console.log(req.session);
-  res.sendFile(__dirname + './views/browser-console/login.html');
-  // if (!req.session.loggedIn) {
-  //   res.sendFile(__dirname + './views/browser-console/login.html');
-  // }
-})
+
+// app.get('/views/*', (req, res) => {
+//   console.log(req.session.loggedIn);
+
+//   if (req.session.loggedIn === true) {
+//     // res.sendFile(__dirname + './views/browser-console/alerts.html');
+//     next(); // allow the next route to run
+//   } else {
+//     console.log('require the user to log in');
+//     res.redirect("/views/browser-console/login.html"); // or render a form, etc.
+//   }
+//   // console.log(req.session);
+//   // res.sendFile(__dirname + '/views/browser-console/login.html');
+//   // if (!req.session.loggedIn) {
+//   //   res.sendFile(__dirname + './views/browser-console/login.html');
+//   // }
+// })
+
+
+
+
 app.get('/about', (req, res) => {
-  res.sendFile(__dirname + './views/browser-console/about.html');
+  res.sendFile(__dirname + '/views/browser-console/about.html');
 })
 app.get('/alerts', (req, res) => {
-  res.sendFile(__dirname + './views/browser-console/alerts.html');
+  console.log(req.session);
+  if (req.session.loggedIn) {
+    res.sendFile(__dirname + '/views/browser-console/alerts.html');
+    // next(); // allow the next route to run
+  } else {
+    // require the user to log in
+    res.redirect("/login"); // or render a form, etc.
+  }
+
   // if (req.session.loggedIn) {
-  //   res.sendFile(__dirname + './views/browser-console/alerts.html');
+  //   res.sendFile(__dirname + '/views/browser-console/alerts.html');
   // } else {
-  //   res.sendFile(__dirname + './views/browser-console/login.html');
+  //   res.sendFile(__dirname + '/views/browser-console/login.html');
   // }
 })
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + './views/browser-console/login.html');
+  res.sendFile(__dirname + '/views/browser-console/login.html');
 })
 app.get('/signup', (req, res) => {
-  res.sendFile(__dirname + './views/browser-console/signup.html');
+  res.sendFile(__dirname + '/views/browser-console/signup.html');
 })
-//
+app.get('/', (req, res) => {
+  console.log(req.session);
+  res.sendFile(__dirname + '/views/browser-console/tabs.html');
+  // if (req.session.loggedIn) {
+  //   res.sendFile(__dirname + '/views/browser-console/tabs.html');
+  // } else {
+  //   res.sendFile(__dirname + '/views/browser-console/login.html');
+  // }
+})
+
 const usersRoute = require("./routes/user");
 const alertsRoute = require("./routes/alert");
 const dangerZonesRoute = require("./routes/danger-zone");
@@ -66,16 +98,7 @@ app.use(function (req, res, next) {
   next();
 });
 //
-app.use(
-  expressSession({
-    secret: "BREATHE RIGHT",
-    cookie: {
-      maxAge: 60000
-    },
-    resave: false,
-    saveUninitialized: true
-  })
-);
+
 //
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", true);

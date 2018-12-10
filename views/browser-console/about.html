@@ -8,16 +8,36 @@
 </head>
 <!-- uses bootstrap.css for styling -->
 <body>
-    <h1 class="title">Women In Danger</h1>
-    <div class="tabContainer">
-        <div class="buttonContainer">
-            <button onclick="window.open('tabs.html', '_self');">Home Page</button>
-            <button onclick="window.open('about.html', '_self');">About</button>
-            <button onclick="window.open('alerts.html', '_self');">Danger Alerts</button>
-            <button onclick="window.open('Login.html', '_self');">Log In</button>
-            <button onclick="window.open('signup.html', '_self');">Sign Up</button>
+    <div class="title-banner">
+        <h1 class="title">Women In Danger</h1>
+        <div class="buttonTab">
+          <button onclick="window.open('login.html', '_self');">Log In</button>
+          <button onclick="window.open('signup.html', '_self');">Sign Up</button>
         </div>
-    </div>
+      </div>
+    
+      <div class="tabContainer">
+        <div class="buttonContainer">
+          <div class="buttonTab">
+            <span class="buttonIcon"><img src="assets/svgs/homeIcon.svg" ></span>
+            <button onclick="window.open('tabs.html', '_self');">Home Page</button>
+          </div>
+          <div class="buttonTab">
+              <span class="buttonIcon"><img src="assets/svgs/infoIcon.svg" ></span>
+            <button onclick="window.open('about.html', '_self');">About</button>
+          </div>
+          <div class="buttonTab">
+              <span class="buttonIcon"><img src="assets/svgs/alertIcon.svg" ></span>
+            <button onclick="window.open('alerts.html', '_self');">Danger Alerts</button>
+          </div>
+          <!-- <div class="buttonTab">
+            <button onclick="window.open('login.html', '_self');">Log In</button>
+          </div>
+          <div class="buttonTab">
+            <button onclick="window.open('signup.html', '_self');">Sign Up</button>
+          </div> -->
+        </div>
+      </div>
 
     <div class="box">
         <h3>

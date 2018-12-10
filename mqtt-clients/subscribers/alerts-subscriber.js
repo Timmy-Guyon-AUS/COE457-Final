@@ -57,13 +57,14 @@ client.on('connect', function () {
             if (err) {
                   console.log('error in subscribing');
             }else{
-                  console.log('success in subbing')
+               
             }
       })
 });
 
 
 // receiving a topic
+
 client.on('message', function (topic, message) {
       // message is Buffer
 
