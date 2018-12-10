@@ -49,7 +49,7 @@ app.get('/about', (req, res) => {
   res.sendFile(__dirname + '/views/browser-console/about.html');
 })
 app.get('/alerts', (req, res) => {
-  console.log(req.session);
+  // console.log(req.session);
   if (req.session.loggedIn) {
     res.sendFile(__dirname + '/views/browser-console/alerts.html');
     // next(); // allow the next route to run
@@ -71,13 +71,13 @@ app.get('/signup', (req, res) => {
   res.sendFile(__dirname + '/views/browser-console/signup.html');
 })
 app.get('/', (req, res) => {
-  console.log(req.session);
-  res.sendFile(__dirname + '/views/browser-console/tabs.html');
-  // if (req.session.loggedIn) {
-  //   res.sendFile(__dirname + '/views/browser-console/tabs.html');
-  // } else {
-  //   res.sendFile(__dirname + '/views/browser-console/login.html');
-  // }
+  if (req.session.loggedIn) {
+    res.sendFile(__dirname + '/views/browser-console/alerts.html');
+    // next(); // allow the next route to run
+  } else {
+    // require the user to log in
+    res.redirect("/login"); // or render a form, etc.
+  }
 })
 
 const usersRoute = require("./routes/user");
