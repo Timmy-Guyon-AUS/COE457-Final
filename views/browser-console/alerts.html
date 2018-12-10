@@ -5,10 +5,10 @@
   <meta charset="utf-8" />
   <title> Danger Alerts </title>
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="./css/styleTabs.css">
+  <link rel="stylesheet" type="text/css" href="/views/browser-console/css/styleTabs.css">
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
-  <link rel="stylesheet" href="./css/styleAlerts.css">
+  <link rel="stylesheet" href="/views/browser-console/css/styleAlerts.css">
 </head>
 
 <body>
@@ -24,15 +24,15 @@
   <div class="tabContainer">
     <div class="buttonContainer">
       <div class="buttonTab">
-        <span class="buttonIcon"><img src="assets/svgs/homeIcon.svg" ></span>
+        <span class="buttonIcon"><img src="/views/browser-console/assets/svgs/homeIcon.svg" ></span>
         <button onclick="window.open('tabs.html', '_self');">Home Page</button>
       </div>
       <div class="buttonTab">
-          <span class="buttonIcon"><img src="assets/svgs/infoIcon.svg" ></span>
+          <span class="buttonIcon"><img src="/views/browser-console/assets/svgs/infoIcon.svg" ></span>
         <button onclick="window.open('about.html', '_self');">About</button>
       </div>
       <div class="buttonTab">
-          <span class="buttonIcon"><img src="assets/svgs/alertIcon.svg" ></span>
+          <span class="buttonIcon"><img src="/views/browser-console/assets/svgs/alertIcon.svg" ></span>
         <button onclick="window.open('alerts.html', '_self');">Danger Alerts</button>
       </div>
       <!-- <div class="buttonTab">
@@ -67,9 +67,10 @@
 <footer>
   <!-- linking our JS and the google maps javascript -->
   <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxuO00JkJOnCtNxK5YzsQNFB7cKEutcZ4&callback=initMap">
+  <script src="/views/browser-console/js/mapScripts.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxuO00JkJOnCtNxK5YzsQNFB7cKEutcZ4&callback=initMap">
   </script>
-  <script src="./js/mapScripts.js"></script>
+  
 
 </footer>
 

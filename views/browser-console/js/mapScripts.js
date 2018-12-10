@@ -43,9 +43,11 @@ function initMap() {
   centerControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
   //
-  loadDangerZones();
-  //
-  initAlertListener();
+  if (map) {
+    loadDangerZones();
+    //
+    initAlertListener();
+  }
 
   // Try HTML5 geolocation.
   if (navigator.geolocation) {
