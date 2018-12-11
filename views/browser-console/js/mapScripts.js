@@ -236,6 +236,36 @@ function simulateConfirmation(map) {
 function changeAlertStatus(dangerAlert, status) {
   dangerAlert.status = status;
 }
+function checkLoggedInAndRedirect() {
+  $.ajax({
+    type: "GET",
+    url: window.location.origin + "/isLoggedIn", // Using our resources.json file to serve results
+    success: function (result) {
+      result = JSON.parse(result);
+      if (!result.isLoggedIn) {
+        window.location.replace(window.location.origin + "/alerts");
+      }
+    }
+  });
+
+  // $.ajax({
+  //   type: 'GET',
+  //   url: window.location.href,
+  //   async: false,
+  //   data: 'json',
+
+  //   success: function (data, text, jqXHR) {
+  //     console.log(data);
+  //     console.log(jqXHR)
+  //     console.log(jqXHR.status)
+  //   },
+  //   error: function (request, status, error) {
+  //     console.log(status);
+  //   }
+
+  // });
+}
+checkLoggedInAndRedirect();
 
 function initAlertListener() {
   console.log('initing');

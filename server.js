@@ -24,23 +24,14 @@ app.use(
 //
 
 //Routes - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-// app.get('/views/*', (req, res) => {
-//   console.log(req.session.loggedIn);
-
-//   if (req.session.loggedIn === true) {
-//     // res.sendFile(__dirname + './views/browser-console/alerts.html');
-//     next(); // allow the next route to run
-//   } else {
-//     console.log('require the user to log in');
-//     res.redirect("/views/browser-console/login.html"); // or render a form, etc.
-//   }
-//   // console.log(req.session);
-//   // res.sendFile(__dirname + '/views/browser-console/login.html');
-//   // if (!req.session.loggedIn) {
-//   //   res.sendFile(__dirname + './views/browser-console/login.html');
-//   // }
-// })
+app.get('/isLoggedIn', (req, res) => {
+  resObj = {
+    isLoggedIn: req.session.loggedIn ? true : false,
+  }
+  console.log(resObj);
+  // res.send('wooo');
+  res.end(JSON.stringify(resObj));
+})
 
 
 
