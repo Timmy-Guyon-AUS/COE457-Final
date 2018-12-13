@@ -74,7 +74,7 @@ function initMap() {
 
 }
 //
-loadDangerZones(pos);
+// loadDangerZones(pos);
 //
 initAlertListener();
 function handleLocationError(browserHasGeolocation, errorInfoWindow, pos) {
@@ -350,13 +350,14 @@ function CenterControl(controlDiv, map) {
   // });
 
 }
-function loadDangerZones(pos) {
-  console.log(pos);
-  $.getJSON("/danger-zones/area2", function (result) {
+function loadDangerZones() {
+  $.getJSON("/danger-zones/area1", function (result) {
     succesfulinit = true;
     result.map(function (dangerZone) {
       if (!dangerZones.some(function (loggedZone) { return loggedZone == dangerZone.id })) {
         dangerZones.push(dangerZone.id);
+        dangerZone.value.location.lat = parseFloat(dangerZone.value.location.lat);
+        dangerZone.value.location.lng = parseFloat(dangerZone.value.location.lng);
         var cityCircle = new google.maps.Circle({
           strokeColor: '#FF0000',
           strokeOpacity: 0.8,
@@ -365,7 +366,7 @@ function loadDangerZones(pos) {
           fillOpacity: 0.35,
           map: map,
           center: dangerZone.value.location,
-          radius: Math.sqrt(dangerZone.value.temp) * 200
+          radius: 600
         });
         var infoUL = document.createElement('ul');
         infoUL.classList.add('dangerZoneUl')

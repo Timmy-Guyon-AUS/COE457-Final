@@ -11,7 +11,7 @@ body {
 }
 
 #console-container {
-      height: calc(100% - 103px);
+      height: calc(100% - 142px);
       width: 100%;
       display: flex;
       align-items: center;
@@ -37,6 +37,7 @@ body {
       background-color: white;
       z-index: 2;
 }
+
 
 #console-container #console-sidebar-container #header-container:after {
       content: "";
