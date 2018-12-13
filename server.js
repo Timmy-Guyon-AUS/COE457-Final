@@ -17,8 +17,8 @@ app.use(
     cookie: {
       maxAge: 60000
     },
-    resave: false,
-    saveUninitialized: true
+    // resave: false,
+    // saveUninitialized: true
   })
 );
 //

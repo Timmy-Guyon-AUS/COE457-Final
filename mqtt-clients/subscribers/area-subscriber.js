@@ -90,6 +90,7 @@ client.on('connect', function () {
                         i++;
                   }
                   if (i == 4) { //if all values have been sent, add the value to the databse
+                        i = 0;
                         addEnvData();
                   }
                   areaname = t[1]; //area1, area2,...
@@ -112,34 +113,45 @@ function addEnvData() {
 
       id = areaname
 
-      areasDB.insert(response, id, function (err, body, header) {
+      areasDB.insert(response,id, function (err, body, header) {
+            console.log(body);
             if (err) {
                   //when values are published from the same area (microcontroller), update the values in the db 
+                  
                   if (err.message == "Document update conflict.") {
-                        updateAreaInfo();
+                        updateAreaInfo(response.area);
                   }
             }
       });
 }
 
 //update(overwrite) the values in the db for a given area
-let updateAreaInfo = async () => {
-      try {
-            let doc = await areaSafety.get(areaname)
-            doc.time = new Date().toLocaleString();
-            doc.temperature = temp;
-            doc.humidity = humi;
-            doc.lightintensity = lightint
-            doc.location = {
-                  "lat": loc[0],
-                  "lng": loc[1]
-                  
+function updateAreaInfo(areaName) {
+      areasDB.view('browser-side-views', 'view-danger-zones', {
+            key: areaName
+      }, (err, body) => {
+            if (!err) {
+                  console.log(body);
+            } else {
+                  console.log(err);
             }
-            areasDB.insert(doc);
+      });
+      // try {
+      //       let doc = areaSafety.get(areaname)
+      //       doc.time = new Date().toLocaleString();
+      //       doc.temperature = temp;
+      //       doc.humidity = humi;
+      //       doc.lightintensity = lightint
+      //       doc.location = {
+      //             "lat": loc[0],
+      //             "lng": loc[1]
 
-      } catch (err) {
-            console.log(err);
-      }
+      //       }
+      //       areasDB.insert(doc);
+
+      // } catch (err) {
+      //       console.log(err);
+      // }
 }
 
 //MQTT client- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -166,3 +178,15 @@ let updateAreaInfo = async () => {
 //       }
 // })
 module.exports = client;
+
+
+alert = {
+      id: 'area1',
+      key: 'area1',
+      value:
+      {
+            time: '12/13/2018, 1:56:11 PM',
+            location: { lat: '25.02165', lng: '55.51354' },
+            humidity: '57.60'
+      }
+} 
