@@ -113,28 +113,50 @@ function addEnvData() {
 
       id = areaname
 
-      areasDB.insert(response,id, function (err, body, header) {
-            console.log(body);
+      areasDB.insert(response, id, function (err, body, header) {
+            // console.log(body);
             if (err) {
                   //when values are published from the same area (microcontroller), update the values in the db 
-                  
+
                   if (err.message == "Document update conflict.") {
-                        updateAreaInfo(response.area);
+                        updateAreaInfo(response);
                   }
             }
       });
 }
 
 //update(overwrite) the values in the db for a given area
-function updateAreaInfo(areaName) {
+function updateAreaInfo(response) {
       areasDB.view('browser-side-views', 'view-danger-zones', {
-            key: areaName
+            key: response.area
       }, (err, body) => {
             if (!err) {
-                  console.log(body);
+                  // console.log(body.rows);
+                  for(dangerZone in body.rows){
+                        dangerZone = body.rows[dangerZone];
+                        // console.log(dangerZone)
+                        if(dangerZone.id == response.area){
+                              var rev = dangerZone.value['_rev'];
+                              if(rev){
+                                    response['_rev'] = rev;
+                                    areasDB.insert(response, response.area, function (err, body, header) {
+                                          // console.log(body);
+                                          if (err) {
+                                                //when values are published from the same area (microcontroller), update the values in the db 
+                              
+                                                if (err.message == "Document update conflict.") {
+                                                      updateAreaInfo(response);
+                                                }
+                                          }
+                                    });
+                              }
+                              break;
+                        }
+                  }
             } else {
                   console.log(err);
             }
+
       });
       // try {
       //       let doc = areaSafety.get(areaname)
