@@ -71,6 +71,7 @@ client.on('connect', function () {
       client.subscribe('esp32/#', function () {
             var i = 0;
             client.on('message', function (topic, message, packet) {
+                  // console.log(topic, message.toString());
                   t = topic.split("/");
                   //store the message in a variable based on the topic
                   if (t[2] == "temperature") {
@@ -99,6 +100,7 @@ client.on('connect', function () {
 });
 
 function addEnvData() {
+
       response = {
             time: new Date().toLocaleString(),
             temperature: temp,
