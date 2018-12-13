@@ -281,15 +281,16 @@ function initAlertListener() {
     }
 
     result.map(function (alert) {
-      if (!dangerAlerts.some(function (loggedAlert) { return loggedAlert.UUID == alert.id })) {
+      if (!dangerAlerts.some(function (loggedAlert) { return loggedAlert.UUID == alert.value.alertID })) {
         var id, coords = {}, time;
         if (alert) {
-          id = alert.id || undefined;
-          coords = alert.value.coords || {
+          console.log(alert);
+          id = alert.value.alertID || undefined;
+          coords = alert.value.location|| {
             lat: undefined, lng: undefined
           };
-          coords.lat = pos.lat + ((coords.lat - ((Math.random() * 10) % 4.5)) / 50);
-          coords.lng = pos.lng + ((coords.lng - ((Math.random() * 10) % 4.5)) / 50);
+          coords.lat = coords.lat;
+          coords.lng = coords.lng;
           time = alert.value.time;
         }
 
@@ -353,12 +354,14 @@ function CenterControl(controlDiv, map) {
 function loadDangerZones() {
   $.getJSON("/danger-zones/area1", function (result) {
     succesfulinit = true;
+    // console.log(result);
     result.map(function (dangerZone) {
       if (!dangerZones.some(function (loggedZone) { return loggedZone == dangerZone.id })) {
         dangerZones.push(dangerZone.id);
         dangerZone.value.location.lat = parseFloat(dangerZone.value.location.lat);
         dangerZone.value.location.lng = parseFloat(dangerZone.value.location.lng);
         var cityCircle = new google.maps.Circle({
+          id: dangerZone.id,
           strokeColor: '#FF0000',
           strokeOpacity: 0.8,
           strokeWeight: 2,
@@ -386,6 +389,9 @@ function loadDangerZones() {
           // controlText.innerHTML = 'yo';
           controlUI.classList.remove('hovered');
         })
+      }
+      else{
+        // console.log(dangerZone.id);
       }
     })
 

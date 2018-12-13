@@ -53,7 +53,7 @@ if (cloudant) {
 // subscribing to a topic
 client.on('connect', function () {
       console.log('connected...' + '\n');
-      client.subscribe('alert/initial-alert', function (err) {
+      client.subscribe('S2watch/#', function (err) {
             if (err) {
                   console.log('error in subscribing');
             }else{
@@ -81,7 +81,6 @@ client.on('message', function (topic, message) {
             alertsDB.insert(alert, function (err, body, header) {
                   if (err) {
                         console.log('[alertsDB.insert] ', err.message);
-                        res.send("Error");
                         return;
                   }
                   alert._id = body.id;
